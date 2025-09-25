@@ -45,7 +45,10 @@ class PetService {
         validationError.status = 400;
         throw validationError;
       }
-      const response = await this.createPetRaw(apiData);
+      const response = await apiRequest("/pets", {
+        method: "POST",
+        body: JSON.stringify(petData),
+      });
       showSuccessToast(response, "Pet cadastrado com sucesso!");
       return response;
     } catch (error) {
@@ -63,7 +66,10 @@ class PetService {
         validationError.status = 400;
         throw validationError;
       }
-      const response = await this.updatePetRaw(petId, apiData);
+      const response = await apiRequest(`/pets/${petId}`, {
+        method: "PUT",
+        body: JSON.stringify(updateData),
+      });
       showSuccessToast(response, "Pet atualizado com sucesso!");
       return response;
     } catch (error) {
@@ -74,7 +80,9 @@ class PetService {
 
   static async deletePet(petId) {
     try {
-      await this.deletePetRaw(petId);
+      await apiRequest(`/pets/${petId}`, {
+        method: "DELETE",
+      });
       showToast("Pet removido com sucesso!", "Sucesso", "success");
     } catch (error) {
       showErrorToast(error);
@@ -246,18 +254,6 @@ class PetService {
     };
   }
 
-  static async getPetByIdRaw(petId) {
-    if (!petId || isNaN(petId)) {
-      const error = new Error("Pet ID is required and must be a number");
-      error.status = 400;
-      throw error;
-    }
-
-    return await apiRequest(`/pets/${petId}`, {
-      method: "GET",
-    });
-  }
-
   static async getAllPets(filters = {}) {
     const queryParams = new URLSearchParams();
 
@@ -279,13 +275,6 @@ class PetService {
     });
   }
 
-  static async createPetRaw(petData) {
-    return await apiRequest("/pets", {
-      method: "POST",
-      body: JSON.stringify(petData),
-    });
-  }
-
   static async getPetById(petId) {
     if (!petId || isNaN(petId)) {
       const error = new Error("Pet ID is required and must be a number");
@@ -295,31 +284,6 @@ class PetService {
 
     return await apiRequest(`/pets/${petId}`, {
       method: "GET",
-    });
-  }
-
-  static async updatePetRaw(petId, updateData) {
-    if (!petId || isNaN(petId)) {
-      const error = new Error("Pet ID is required and must be a number");
-      error.status = 400;
-      throw error;
-    }
-
-    return await apiRequest(`/pets/${petId}`, {
-      method: "PUT",
-      body: JSON.stringify(updateData),
-    });
-  }
-
-  static async deletePetRaw(petId) {
-    if (!petId || isNaN(petId)) {
-      const error = new Error("Pet ID is required and must be a number");
-      error.status = 400;
-      throw error;
-    }
-
-    return await apiRequest(`/pets/${petId}`, {
-      method: "DELETE",
     });
   }
 }
