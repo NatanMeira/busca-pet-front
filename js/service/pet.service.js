@@ -68,7 +68,7 @@ class PetService {
       }
       const response = await apiRequest(`/pets/${petId}`, {
         method: "PUT",
-        body: JSON.stringify(updateData),
+        body: JSON.stringify(apiData),
       });
       showSuccessToast(response, "Pet atualizado com sucesso!");
       return response;
