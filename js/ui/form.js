@@ -16,7 +16,7 @@ function getModalElements() {
   return MODAL_ELEMENTS_CACHE.modal;
 }
 
-function openModal(mode, petIndex = null) {
+async function openModal(mode, petIndex = null) {
   window.currentMode = mode;
   window.currentPetIndex = petIndex;
 
@@ -57,29 +57,33 @@ function openModal(mode, petIndex = null) {
     modalElements.cancelBtn.textContent = "Cancelar";
     setFormMode(false, false);
     modalElements.fotoInput.setAttribute("required", "required");
-  } else if (mode === "edit") {
+  }
+
+  const pet = await PetService.getPetById(window.pets[petIndex].id);
+  populateForm(pet);
+  console.log("pet ", pet);
+
+  if (mode === "edit") {
     modalElements.modalTitle.textContent = "Editar Pet";
     modalElements.submitBtn.textContent = "Salvar Alterações";
     modalElements.submitBtn.className = "btn btn-warning";
     modalElements.submitBtn.onclick = () => submitForm();
     modalElements.cancelBtn.textContent = "Cancelar";
     setFormMode(false, false);
-    populateForm(window.pets[petIndex]);
-
-    const pet = window.pets[petIndex];
     if (pet && pet.foto) {
       modalElements.fotoInput.removeAttribute("required");
     } else {
       modalElements.fotoInput.setAttribute("required", "required");
     }
-  } else if (mode === "view") {
+  }
+
+  if (mode === "view") {
     modalElements.modalTitle.textContent = "Detalhes do Pet";
     modalElements.submitBtn.textContent = "Editar";
     modalElements.submitBtn.className = "btn btn-warning";
     modalElements.submitBtn.onclick = () => switchToEditMode();
     modalElements.cancelBtn.textContent = "Fechar";
     setFormMode(true, true);
-    populateForm(window.pets[petIndex]);
   }
 
   modal.show();
@@ -158,6 +162,7 @@ function setFormMode(readonly, disabled) {
 }
 
 function populateForm(pet) {
+  console.log("populateForm pet ", pet);
   document.getElementById("nome").value = pet.nome || "";
   document.getElementById("idade").value = pet.idade || "";
   document.getElementById("raca").value = pet.raca || "";

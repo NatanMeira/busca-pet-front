@@ -282,8 +282,10 @@ class PetService {
       throw error;
     }
 
-    return await apiRequest(`/pets/${petId}`, {
+    const response = await apiRequest(`/pets/${petId}`, {
       method: "GET",
     });
+
+    return this.transformAPIToForm(response.data);
   }
 }
