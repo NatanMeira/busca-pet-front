@@ -47,7 +47,7 @@ class PetService {
       }
       const response = await apiRequest("/pets", {
         method: "POST",
-        body: JSON.stringify(petData),
+        body: JSON.stringify(apiData),
       });
       showSuccessToast(response, "Pet cadastrado com sucesso!");
       return response;
