@@ -57,11 +57,13 @@ async function openModal(mode, petIndex = null) {
     modalElements.cancelBtn.textContent = "Cancelar";
     setFormMode(false, false);
     modalElements.fotoInput.setAttribute("required", "required");
+
+    modal.show();
+    return;
   }
 
   const pet = await PetService.getPetById(window.pets[petIndex].id);
   populateForm(pet);
-  console.log("pet ", pet);
 
   if (mode === "edit") {
     modalElements.modalTitle.textContent = "Editar Pet";
@@ -75,9 +77,7 @@ async function openModal(mode, petIndex = null) {
     } else {
       modalElements.fotoInput.setAttribute("required", "required");
     }
-  }
-
-  if (mode === "view") {
+  } else if (mode === "view") {
     modalElements.modalTitle.textContent = "Detalhes do Pet";
     modalElements.submitBtn.textContent = "Editar";
     modalElements.submitBtn.className = "btn btn-warning";
@@ -162,7 +162,6 @@ function setFormMode(readonly, disabled) {
 }
 
 function populateForm(pet) {
-  console.log("populateForm pet ", pet);
   document.getElementById("nome").value = pet.nome || "";
   document.getElementById("idade").value = pet.idade || "";
   document.getElementById("raca").value = pet.raca || "";
