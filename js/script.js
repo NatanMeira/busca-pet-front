@@ -9,6 +9,7 @@ window.currentFilters = {};
 
 async function loadPets(filters = {}, page = 1, size = window.pageSize) {
   const result = await PetService.loadPets(filters, page, size);
+
   window.pets = result.pets;
   window.currentPage = result.pagination.currentPage;
   window.totalPages = result.pagination.totalPages;

@@ -7,12 +7,14 @@ function updatePaginationControls() {
     return;
   }
 
-  if (window.totalPages <= 1) {
+  if (!window.window.pets.length) {
     paginationContainer.style.display = "none";
+    paginationInfo.style.display = "none";
     return;
   }
 
-  paginationContainer.style.display = "block";
+  paginationContainer.style.display = "flex";
+  paginationInfo.style.display = "block";
   pagination.innerHTML = "";
 
   const prevDisabled = window.currentPage === 1;
